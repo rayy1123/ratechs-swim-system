@@ -3,8 +3,8 @@ do $$
 declare
   v_p uuid; v_u uuid;
 begin
-  select id into v_p from auth.users where email='panitia@rajendra.id';
-  select id into v_u from auth.users where email='penonton@rajendra.id';
+  select id into v_p from auth.users where email='panitia@ratechs.id';
+  select id into v_u from auth.users where email='penonton@ratechs.id';
 
   update auth.users set email_confirmed_at = now(),
     raw_app_meta_data = jsonb_build_object('provider','email','providers',array['email'])

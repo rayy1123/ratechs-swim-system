@@ -87,7 +87,7 @@ export function Testimonials({
 
   return (
     <div className={cn('space-y-10', className)}>
-      {/* ── 1. HEADER SECTION & VALUE PROPOSITION (SESUAI RAJENDRARENANG.COM) ── */}
+      {/* ── 1. HEADER SECTION & VALUE PROPOSITION (SESUAI RATECHS.ID) ── */}
       <div className="text-center space-y-3 max-w-3xl mx-auto">
         <div className="flex items-center justify-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[var(--m-aqua-soft)] text-[var(--m-aqua-ink)] border border-[var(--m-aqua)]/20 shadow-2xs">

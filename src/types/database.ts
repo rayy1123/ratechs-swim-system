@@ -187,7 +187,7 @@ export interface TieBreakRule {
   updated_at?: string;
 }
 
-export interface RajendraRecord {
+export interface RatechsRecord {
   id: string;
   competition_event_id?: string | null;
   record_key: string;

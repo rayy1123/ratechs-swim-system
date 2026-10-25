@@ -252,7 +252,7 @@ export function OfficialLetterSheet({ data, isPrintOnly = false }: OfficialLette
                       className="h-full w-full object-contain"
                     />
                   ) : (
-                    /* Badge Stamp SVG Harahap / Rajendra */
+                    /* Badge Stamp SVG Harahap / Ratechs */
                     <svg viewBox="0 0 140 70" className="h-full w-full text-blue-700">
                       <rect x="5" y="5" width="130" height="60" rx="8" fill="none" stroke="currentColor" strokeWidth="2" />
                       <text x="70" y="24" textAnchor="middle" fontSize="8" fontWeight="bold" fill="currentColor">

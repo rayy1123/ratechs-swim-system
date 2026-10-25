@@ -28,7 +28,7 @@ function realisticTime(stroke, dist) {
 function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
 async function main() {
-  const { error: e0 } = await sb.auth.signInWithPassword({ email: 'admin@rajendra.id', password: 'Rajendra#2026' });
+  const { error: e0 } = await sb.auth.signInWithPassword({ email: 'admin@ratechs.id', password: 'Ratechs#2026' });
   if (e0) throw new Error('LOGIN GAGAL: ' + e0.message);
 
   // Bersihkan hasil & pendaftaran lama (demo hanya berisi seed)

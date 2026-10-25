@@ -1,4 +1,4 @@
-# PANDUAN PENYIMPANAN ASSET VIDEO RAJENDRA MEET
+# PANDUAN PENYIMPANAN ASSET VIDEO RATECHS MEET
 
 Letakkan berkas video dokumentasi kejuaraan renang di folder ini:
 

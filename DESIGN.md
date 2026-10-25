@@ -1,4 +1,4 @@
-# DESIGN SYSTEM: Rajendra SCMS High-End UI/UX
+# DESIGN SYSTEM: Ratechs SCMS High-End UI/UX
 **Design System Version:** 2.0 (Modern Aquatic Glassmorphism)  
 **Theme Policy:** Strict Light-Only (No Dark Mode Remnants)  
 **Target Quality:** Elite Corporate & Sports Technology Standard
@@ -7,7 +7,7 @@
 
 ## 1. Design Philosophy & Aesthetic Core
 
-Rajendra SCMS mengusung estetika **Modern Aquatic Glassmorphism**:
+Ratechs SCMS mengusung estetika **Modern Aquatic Glassmorphism**:
 1. **Translucent & Layered Depth**: Permukaan antarmuka dibangun dengan panel kaca berlapis lembut (`.glass-panel`, `.glass-card`), memberikan rasa lapang dan modern menyerupai air jernih kolam olimpiade.
 2. **High-Contrast Legibility**: Di tengah elemen kaca dan aksen air, keterbacaan teks adalah prioritas absolut. Warna teks menggunakan tint tinta gelap berbobot (`--m-ink`), bukan abu-abu pudar.
 3. **Restrained Aqua Accents**: Warna biru toska/aqua (`--m-aqua`) diperlakukan sebagai aksen primer untuk fokus tindakan (CTA), lencana aktif, dan indikator progres, bukan membanjiri seluruh latar belakang.

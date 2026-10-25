@@ -6,7 +6,7 @@
 ---
 
 ## 1. Executive Summary
-Project SCMS Rajendra Meet saat ini sudah memiliki fondasi yang solid untuk navigasi publik dan dashboard panitia. Fokus utama pengguna adalah menciptakan pengalaman yang "comfortable" bagi penonton/atlet di dashboard viewer dan halaman live/scoreboard, tanpa over-engineering.
+Project SCMS Ratechs Meet saat ini sudah memiliki fondasi yang solid untuk navigasi publik dan dashboard panitia. Fokus utama pengguna adalah menciptakan pengalaman yang "comfortable" bagi penonton/atlet di dashboard viewer dan halaman live/scoreboard, tanpa over-engineering.
 
 ---
 

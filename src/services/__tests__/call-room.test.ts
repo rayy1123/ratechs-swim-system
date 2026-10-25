@@ -28,7 +28,7 @@ describe('Call Room (Meja Panggil) Service', () => {
     const itemCalled = updateCallRoomStatusServer(assignmentId, {
       heat_id: 'heat-1',
       competition_event_id: 'ce-50m-free',
-      event_id: 'event-rajendra-2026',
+      event_id: 'event-ratechs-2026',
       lane_number: 4,
       athlete_name: 'Aditya Sihombing',
       athlete_number: '104',
@@ -61,7 +61,7 @@ describe('Call Room (Meja Panggil) Service', () => {
     const itemScratched = updateCallRoomStatusServer(assignmentId, {
       heat_id: 'heat-1',
       competition_event_id: 'ce-50m-free',
-      event_id: 'event-rajendra-2026',
+      event_id: 'event-ratechs-2026',
       lane_number: 2,
       athlete_name: 'Bima Paralayang',
       status: 'scratched',

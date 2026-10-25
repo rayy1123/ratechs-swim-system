@@ -306,7 +306,7 @@ export function MedalTallyView({
               />
               <div>
                 <p className="font-heading font-black text-xs text-white uppercase tracking-tight">
-                  Rajendra <span className="text-cyan-300">Swim System</span>
+                  Ratechs <span className="text-cyan-300">Swim System</span>
                 </p>
                 <p className="text-[9px] font-mono text-cyan-200 font-semibold uppercase">OFFICIAL MEDAL TALLY</p>
               </div>

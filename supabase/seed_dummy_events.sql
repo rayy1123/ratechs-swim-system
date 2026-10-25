@@ -15,7 +15,7 @@ values
    '2026-07-28', '2026-07-29', 'Long Course', 50, 8, true),
   ('POPDA DKI Jakarta 2026', 'Dispora DKI', 'Aqua Indonesia, Cibubur',
    '2026-08-10', '2026-08-12', 'Short Course', 25, 10, true),
-  ('Festival Renang Pelajar 2026', 'Rajendra Meet', 'Kolam Renang Pelajar, Surabaya',
+  ('Festival Renang Pelajar 2026', 'Ratechs Meet', 'Kolam Renang Pelajar, Surabaya',
    '2026-09-05', '2026-09-06', 'Long Course', 50, 6, true)
 on conflict do nothing;
 

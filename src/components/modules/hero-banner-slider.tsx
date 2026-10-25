@@ -137,10 +137,10 @@ export function HeroBannerSlider({
                 className="h-full w-full object-cover object-center"
               />
 
-              {/* Dark Overlay for Clean White Text Contrast (Matching rajendrarenang.com) */}
+              {/* Dark Overlay for Clean White Text Contrast (Matching ratechs.id) */}
               <div className="absolute inset-0 bg-black/35" />
 
-              {/* Centered Title ONLY (Matching rajendrarenang.com Image #16, #17, #18) */}
+              {/* Centered Title ONLY (Matching ratechs.id Image #16, #17, #18) */}
               <div className="relative z-10 flex h-full items-center justify-center px-6 sm:px-12 text-center max-w-4xl mx-auto">
                 <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.65)] whitespace-pre-line leading-tight">
                   {slide.title}
@@ -151,7 +151,7 @@ export function HeroBannerSlider({
         })}
       </div>
 
-      {/* ── NAVIGATION ARROWS (< and >) (Matching rajendrarenang.com) ── */}
+      {/* ── NAVIGATION ARROWS (< and >) (Matching ratechs.id) ── */}
       <button
         type="button"
         onClick={prevSlide}
@@ -170,7 +170,7 @@ export function HeroBannerSlider({
         <ChevronRight className="h-8 w-8 sm:h-12 sm:w-12 stroke-[1.75]" />
       </button>
 
-      {/* ── BOTTOM DOT INDICATOR (Matching rajendrarenang.com) ── */}
+      {/* ── BOTTOM DOT INDICATOR (Matching ratechs.id) ── */}
       <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
         {slides.map((_, i) => (
           <button

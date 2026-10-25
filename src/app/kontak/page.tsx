@@ -19,7 +19,7 @@ const contacts = [
   {
     icon: Camera,
     title: 'Instagram',
-    links: [{ label: '@ratechs.id', href: 'https://www.instagram.com/rajendrarenang/' }],
+    links: [{ label: '@ratechs.id', href: 'https://www.instagram.com/ratechs.id/' }],
   },
   {
     icon: Play,

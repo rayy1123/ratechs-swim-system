@@ -38,7 +38,7 @@ describe('Official Letter Generator Engine (Image #70 Spec)', () => {
       templateType: 'undangan',
       title: 'Surat Undangan Uji Coba',
       kop: {
-        organizationName: 'RAJENDRA TEST CLUB',
+        organizationName: 'RATECHS TEST CLUB',
         locationLine: 'KOLAM RENANG GBK SENAYAN',
         bannerBadgeText: 'SERIES 2026',
         accentColor: '#0284c7',
@@ -72,7 +72,7 @@ describe('Official Letter Generator Engine (Image #70 Spec)', () => {
 
     const fetched = await getLetterByIdServer('let-test-custom-01');
     expect(fetched).not.toBeNull();
-    expect(fetched?.kop.organizationName).toBe('RAJENDRA TEST CLUB');
+    expect(fetched?.kop.organizationName).toBe('RATECHS TEST CLUB');
   });
 
   it('dapat menghapus surat uji coba', async () => {

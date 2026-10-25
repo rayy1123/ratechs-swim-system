@@ -1,5 +1,59 @@
 [
   {
+    "id": "otp_1792906806684_s480h",
+    "email": "user_manual_issue@gmail.com",
+    "fullName": "Manual Swimmer",
+    "code": "776655",
+    "createdAt": "2026-10-25T05:40:06.684Z",
+    "expiresAt": 1792907406683,
+    "status": "verified",
+    "viaEmail": false,
+    "errorMessage": "Diterbitkan secara manual oleh Admin Panitia"
+  },
+  {
+    "id": "otp_1792906806677_5rdo0",
+    "email": "user_valid_test@gmail.com",
+    "fullName": "User Valid",
+    "code": "245482",
+    "createdAt": "2026-10-25T05:40:06.677Z",
+    "expiresAt": 1792907106672,
+    "status": "verified",
+    "viaEmail": false,
+    "errorMessage": "BREVO_API_KEY belum diatur di environment variables."
+  },
+  {
+    "id": "otp_1792906806669_7e64i",
+    "email": "user_wrong_code@gmail.com",
+    "fullName": "User Wrong",
+    "code": "303401",
+    "createdAt": "2026-10-25T05:40:06.669Z",
+    "expiresAt": 1792907106665,
+    "status": "fallback_to_admin",
+    "viaEmail": false,
+    "errorMessage": "BREVO_API_KEY belum diatur di environment variables."
+  },
+  {
+    "id": "otp_1792906806663_p9340",
+    "email": "peserta_fallback@gmail.com",
+    "fullName": "Atlet Fallback",
+    "code": "992211",
+    "createdAt": "2026-10-25T05:40:06.663Z",
+    "expiresAt": 1792907106662,
+    "status": "fallback_to_admin",
+    "viaEmail": false,
+    "errorMessage": "Quota exceeded"
+  },
+  {
+    "id": "otp_1792906806653_kvsfi",
+    "email": "peserta_test_unit@gmail.com",
+    "fullName": "Budi Swimmer Test",
+    "code": "817263",
+    "createdAt": "2026-10-25T05:40:06.651Z",
+    "expiresAt": 1792907106648,
+    "status": "verified",
+    "viaEmail": true
+  },
+  {
     "id": "otp_1792902838783_5ahbc",
     "email": "user_manual_issue@gmail.com",
     "fullName": "Manual Swimmer",
@@ -20,28 +74,6 @@
     "status": "verified",
     "viaEmail": false,
     "errorMessage": "BREVO_API_KEY belum diatur di environment variables."
-  },
-  {
-    "id": "otp_1792902838746_1fjl2",
-    "email": "user_wrong_code@gmail.com",
-    "fullName": "User Wrong",
-    "code": "136831",
-    "createdAt": "2026-10-25T04:33:58.746Z",
-    "expiresAt": 1792903138740,
-    "status": "fallback_to_admin",
-    "viaEmail": false,
-    "errorMessage": "BREVO_API_KEY belum diatur di environment variables."
-  },
-  {
-    "id": "otp_1792902838735_trbvd",
-    "email": "peserta_fallback@gmail.com",
-    "fullName": "Atlet Fallback",
-    "code": "992211",
-    "createdAt": "2026-10-25T04:33:58.735Z",
-    "expiresAt": 1792903138734,
-    "status": "fallback_to_admin",
-    "viaEmail": false,
-    "errorMessage": "Quota exceeded"
   },
   {
     "id": "otp_1792902838725_5swfa",

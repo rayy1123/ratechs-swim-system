@@ -270,7 +270,7 @@ export default async function HomePage() {
             <a href="mailto:ratechs.id@gmail.com" className="pub-btn-ghost">
               <Mail className="h-4 w-4 text-[var(--m-aqua-ink)]" /> Email
             </a>
-            <a href="https://instagram.com/rajendraproject25" target="_blank" rel="noreferrer" className="pub-btn-ghost">
+            <a href="https://instagram.com/ratechs.id" target="_blank" rel="noreferrer" className="pub-btn-ghost">
               <Share2 className="h-4 w-4 text-pink-600" /> Instagram
             </a>
           </div>

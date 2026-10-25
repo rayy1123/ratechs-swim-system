@@ -129,7 +129,7 @@ function HaornasSheetHeader({
           className="h-7 w-auto sm:h-8 max-w-[105px] object-contain"
         />
         <span className="font-heading font-black text-xs sm:text-sm text-slate-900 tracking-tight hidden sm:inline">
-          Rajendra <span className="text-[#0284c7]">Swim System</span>
+          Ratechs <span className="text-[#0284c7]">Swim System</span>
         </span>
       </div>
 
@@ -328,7 +328,7 @@ export function JuknisManager({
   };
 
   const handleResetConfig = () => {
-    if (confirm('Kembalikan petunjuk teknis ke format standar default Rajendra?')) {
+    if (confirm('Kembalikan petunjuk teknis ke format standar default Ratechs?')) {
       setConfig(defaultJuknis);
       setTempConfig(defaultJuknis);
       if (typeof window !== 'undefined' && event?.id) {
@@ -646,7 +646,7 @@ export function JuknisManager({
                   className="h-7.5 w-auto sm:h-8.5 max-w-[115px] object-contain"
                 />
                 <span className="font-heading font-black text-xs sm:text-sm text-slate-900 tracking-tight hidden sm:inline">
-                  Rajendra <span className="text-[#0284c7]">Swim System</span>
+                  Ratechs <span className="text-[#0284c7]">Swim System</span>
                 </span>
               </div>
 

@@ -165,7 +165,7 @@ export function LandingSidebarDrawer({
             />
             <div>
               <div className="font-heading font-black text-sm text-[var(--m-ink)] leading-tight">
-                Rajendra <span className="text-[var(--m-aqua)]">Swim System</span>
+                Ratechs <span className="text-[var(--m-aqua)]">Swim System</span>
               </div>
               <SheetTitle className="text-[10px] font-semibold italic text-primary leading-none mt-0.5">
                 &ldquo;We Organize, You Achieve&rdquo;

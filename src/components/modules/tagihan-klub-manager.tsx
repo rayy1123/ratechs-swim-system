@@ -547,7 +547,7 @@ export function TagihanKlubManager({
                 className="h-10 w-auto object-contain bg-white/20 rounded-lg p-1.5 backdrop-blur-xs mb-1"
               />
               <p className="text-sm sm:text-base font-black tracking-[0.18em] text-white leading-tight font-heading">
-                RAJENDRA
+                RATECHS
               </p>
               <p className="text-[10px] sm:text-xs font-black tracking-[0.22em] text-cyan-200 uppercase leading-tight mt-0.5">
                 SWIM SYSTEM

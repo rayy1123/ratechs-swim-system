@@ -3,4 +3,4 @@ select id, email, email_confirmed_at,
        length(encrypted_password) as pw_len,
        left(encrypted_password, 10) as pw_head
 from auth.users u
-where email in ('panitia@rajendra.id','penonton@rajendra.id','admin@rajendra.id');
+where email in ('panitia@ratechs.id','penonton@ratechs.id','admin@ratechs.id');

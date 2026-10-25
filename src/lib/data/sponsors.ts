@@ -11,10 +11,10 @@ export interface SponsorItem {
 export const DEFAULT_SPONSORS: SponsorItem[] = [
   {
     id: 'sp-1',
-    name: 'Rajendra Aquatic Official',
+    name: 'Ratechs Aquatic Official',
     tier: 'title',
     logoUrl: '/brand/logo.png',
-    websiteUrl: 'https://rajendra.id',
+    websiteUrl: 'https://ratechs.id',
     isActive: true,
     orderNo: 1,
   },

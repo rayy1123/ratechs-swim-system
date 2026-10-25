@@ -23,7 +23,7 @@ declare
     'heats',
     'heat_assignments',
     'results',
-    'rajendra_records'
+    'ratechs_records'
   ];
 begin
   foreach t in array conflicting loop

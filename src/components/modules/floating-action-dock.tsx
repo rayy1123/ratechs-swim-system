@@ -139,7 +139,7 @@ export function FloatingActionDock() {
             className="h-6 w-auto object-contain"
           />
           <span className="font-heading font-black text-xs text-slate-900 uppercase tracking-tight">
-            Rajendra <span className="text-blue-600">Meet Center</span>
+            Ratechs <span className="text-blue-600">Meet Center</span>
           </span>
         </div>
 

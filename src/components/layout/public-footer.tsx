@@ -45,7 +45,7 @@ export function PublicFooter() {
                   className="h-7 w-auto object-contain"
                 />
                 <span className="font-heading font-black text-sm tracking-tight text-slate-950">
-                  Rajendra <span className="text-[#0284c7]">Swim System</span>
+                  Ratechs <span className="text-[#0284c7]">Swim System</span>
                 </span>
               </div>
 

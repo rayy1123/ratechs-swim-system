@@ -46,7 +46,7 @@ describe('Certificate Print & Rendering Engine', () => {
     mainSponsorSubtitle: 'SPONSOR UTAMA RESMI',
     showMainSponsor: true,
     rightLogoUrl: '/brand/ratechs-logo.png',
-    rightLogoTitle: 'RAJENDRA ORGANIZER',
+    rightLogoTitle: 'RATECHS ORGANIZER',
     rightLogoSubtitle: 'CHAMPIONSHIP ORGANIZER',
     backgroundTheme: 'default',
     borderStyle: 'gold_classic',

@@ -100,7 +100,7 @@ export default function DashboardLayout({
               />
               {!collapsed && (
                 <span className="font-heading font-black text-sm text-[var(--m-ink)]">
-                  Rajendra <span className="text-[var(--m-aqua)]">Swim System</span>
+                  Ratechs <span className="text-[var(--m-aqua)]">Swim System</span>
                 </span>
               )}
             </Link>
@@ -151,7 +151,7 @@ export default function DashboardLayout({
 
         {!collapsed && (
           <div className="p-3 border-t border-border/80 text-[10px] text-slate-400 font-mono text-center">
-            © {new Date().getFullYear()} Rajendra Sports System
+            © {new Date().getFullYear()} Ratechs Sports System
           </div>
         )}
       </aside>

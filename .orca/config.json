@@ -1,8 +1,8 @@
 {
-  "name": "Rajendra SCMS Autonomous Orchestrator",
+  "name": "Ratechs SCMS Autonomous Orchestrator",
   "version": "2.0.0",
-  "projectPath": "C:/Rajendra_Project/scms-app",
-  "workspaceRoot": "C:/Rajendra_Project",
+  "projectPath": "C:/Ratechs_Project/scms-app",
+  "workspaceRoot": "C:/Ratechs_Project",
   "prdPath": "PRD.md",
   "designSystemPath": "DESIGN.md",
   "defaultAgent": "antigravity",

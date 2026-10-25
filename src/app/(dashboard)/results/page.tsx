@@ -123,7 +123,7 @@ export default async function ResultsPage({
     }
   }
 
-  // 4. Ambil Rekor Terkini untuk Nomor Lomba Aktif (rajendra_records)
+  // 4. Ambil Rekor Terkini untuk Nomor Lomba Aktif (ratechs_records)
   let currentRecord: {
     id?: string;
     time_ms: number;
@@ -134,7 +134,7 @@ export default async function ResultsPage({
 
   if (activeCompEventId) {
     const { data: recordData } = await supabase
-      .from('rajendra_records')
+      .from('ratechs_records')
       .select(`
         id,
         time_ms,

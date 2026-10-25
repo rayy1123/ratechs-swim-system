@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: scms-app
-          image: ghcr.io/rajendra-swim-system/scms-app:latest
+          image: ghcr.io/ratechs-swim-system/scms-app:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000

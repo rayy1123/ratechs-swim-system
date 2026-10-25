@@ -615,7 +615,7 @@ export function TechnicalChecklistManager({
             <p className="font-bold text-slate-950 mt-1">Meet Director (Ketua Panitia)</p>
             <div className="h-20" />
             <p className="font-bold text-slate-950 underline">( .................................................... )</p>
-            <p className="text-[10px] text-slate-500">Panitia Pelaksana Rajendra SCMS</p>
+            <p className="text-[10px] text-slate-500">Panitia Pelaksana Ratechs SCMS</p>
           </div>
           <div>
             <p className="text-slate-600">Disahkan oleh,</p>

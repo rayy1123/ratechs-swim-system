@@ -164,7 +164,7 @@ export function CertificateCard({
                 className="h-11 sm:h-12 w-auto object-contain shrink-0 drop-shadow-2xs"
               />
               <span className="text-[7.5px] font-black tracking-tight text-[#0f2b5c] uppercase mt-0.5">
-                {settings.leftLogoTitle || 'RAJENDRA'}
+                {settings.leftLogoTitle || 'RATECHS'}
               </span>
             </div>
 

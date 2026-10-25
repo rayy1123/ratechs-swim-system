@@ -637,7 +637,7 @@ export function BukuAcaraManager({
 
       {/* Dokumen Buku Acara (Printable) */}
       <div id="buku-acara-print-area" className="space-y-8">
-        {/* COVER HALAMAN UTAMA (Dengan Logo Rajendra & Logo Sponsor) */}
+        {/* COVER HALAMAN UTAMA (Dengan Logo Ratechs & Logo Sponsor) */}
         {showCoverPage && (
           <div className="buku-page-break rounded-2xl border border-slate-200 print:border-none print:shadow-none bg-white p-8 sm:p-12 text-center shadow-xs space-y-6">
             {/* Header Logos: Ratechs Swim System di Kiri & Ratechs Sports & Event Organizer di Kanan */}
@@ -646,7 +646,7 @@ export function BukuAcaraManager({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/brand/logo.png" alt="Ratechs Swim System" className="h-8 sm:h-9 w-auto max-w-[120px] object-contain shrink-0" />
                 <span className="font-heading font-black text-sm text-slate-900 tracking-tight">
-                  Rajendra <span className="text-[#0284c7]">Swim System</span>
+                  Ratechs <span className="text-[#0284c7]">Swim System</span>
                 </span>
               </div>
               <div className="text-center px-3 flex-1 min-w-0">
@@ -719,7 +719,7 @@ export function BukuAcaraManager({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/brand/logo.png" alt="Ratechs Swim System" className="h-9 sm:h-11 w-auto max-w-[120px] object-contain" />
                 <span className="font-heading font-black text-xs sm:text-sm text-slate-950 tracking-tight hidden sm:inline">
-                  Rajendra <span className="text-[#0284c7]">Swim System</span>
+                  Ratechs <span className="text-[#0284c7]">Swim System</span>
                 </span>
               </div>
 

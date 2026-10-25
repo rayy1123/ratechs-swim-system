@@ -98,8 +98,8 @@ export async function sendEmailOtp(params: {
   });
 
   // 3. Kirim Email OTP via Brevo API dengan Logo Resmi & Tampilan Terpusat
-  const brandLogoUrl = 'https://raw.githubusercontent.com/rayy1123/rajendra-meet/main/public/brand/logo.png';
-  const organizerLogoUrl = 'https://raw.githubusercontent.com/rayy1123/rajendra-meet/main/public/brand/ratechs-logo.png';
+  const brandLogoUrl = 'https://ratechs-swim-system.vercel.app/brand/logo.png';
+  const organizerLogoUrl = 'https://ratechs-swim-system.vercel.app/brand/ratechs-logo.png';
 
   const html = `
     <!DOCTYPE html>
@@ -116,7 +116,7 @@ export async function sendEmailOtp(params: {
           <td style="padding: 32px 24px 20px 24px; text-align: center; background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%); border-bottom: 1px solid #f1f5f9;">
             <img src="${brandLogoUrl}" alt="Ratechs Swim System Logo" width="76" height="76" style="width: 76px; height: 76px; object-fit: contain; margin: 0 auto 12px auto; display: block; border-radius: 12px;" />
             <h1 style="margin: 0; font-size: 19px; font-weight: 900; color: #0f2b5c; letter-spacing: 0.5px; text-transform: uppercase;">
-              Rajendra <span style="color: #0284c7;">Swim System</span>
+              Ratechs <span style="color: #0284c7;">Swim System</span>
             </h1>
             <p style="margin: 6px 0 0 0; font-size: 10px; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 2px;">
               Sistem Manajemen Kejuaraan Renang

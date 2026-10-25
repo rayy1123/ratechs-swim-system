@@ -21,7 +21,7 @@
 do $$
 declare
   v_user_id uuid;
-  v_email   text := 'admin@rajendra.id';   -- ganti kalau mau email lain
+  v_email   text := 'admin@ratechs.id';   -- ganti kalau mau email lain
   v_pass    text := 'GANTI_DENGAN_PASSWORD_KAMU';  -- <-- ISI SENDIRI
   v_name    text := 'Administrator SCMS';
 begin

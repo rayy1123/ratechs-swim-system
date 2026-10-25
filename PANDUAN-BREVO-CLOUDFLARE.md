@@ -70,7 +70,7 @@ Arahkan domain resmi ke Vercel melalui Cloudflare DNS:
 
 | Type | Name | Target / Value | Proxy Status |
 | :--- | :--- | :--- | :--- |
-| **CNAME** | `@` / `rajendra.id` | `cname.vercel-dns.com` | **Proxied** (Orange Cloud) |
+| **CNAME** | `@` / `ratechs.id` | `cname.vercel-dns.com` | **Proxied** (Orange Cloud) |
 | **CNAME** | `www` | `cname.vercel-dns.com` | **Proxied** (Orange Cloud) |
 
 ### B. Mode SSL / TLS Encryption

@@ -1198,7 +1198,7 @@ export function CertificateManager({
                         setSettings((s) => ({
                           ...s,
                           rightLogoUrl: '/brand/ratechs-logo.png',
-                          rightLogoTitle: 'RAJENDRA ORGANIZER',
+                          rightLogoTitle: 'RATECHS ORGANIZER',
                         }))
                       }
                       className="text-[10px] text-blue-600 hover:underline cursor-pointer font-semibold"
@@ -1245,7 +1245,7 @@ export function CertificateManager({
                       <Input
                         value={settings.rightLogoTitle || ''}
                         onChange={(e) => setSettings((s) => ({ ...s, rightLogoTitle: e.target.value }))}
-                        placeholder="RAJENDRA ORGANIZER"
+                        placeholder="RATECHS ORGANIZER"
                         className="h-7 text-xs bg-white mt-0.5"
                       />
                     </div>

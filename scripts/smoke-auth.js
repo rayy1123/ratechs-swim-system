@@ -30,7 +30,7 @@ const routes = [
 ];
 
 const EMAIL = process.env.TEST_EMAIL || 'admin@ratechs.id';
-const PW = process.env.TEST_PASSWORD || 'Rajendra#2026';
+const PW = process.env.TEST_PASSWORD || 'Ratechs#2026';
 
 async function main() {
   const { error } = await sb.auth.signInWithPassword({ email: EMAIL, password: PW });

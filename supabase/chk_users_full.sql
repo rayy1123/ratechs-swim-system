@@ -7,5 +7,5 @@ select
   (select count(*) from auth.identities i where i.user_id = u.id) as ident_count,
   (select provider from auth.identities i where i.user_id = u.id limit 1) as ident_provider
 from auth.users u
-where email in ('admin@rajendra.id','panitia@rajendra.id','penonton@rajendra.id')
+where email in ('admin@ratechs.id','panitia@ratechs.id','penonton@ratechs.id')
 order by email;

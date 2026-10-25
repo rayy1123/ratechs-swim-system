@@ -92,7 +92,7 @@ export function SplitAuthShell({
         <footer className="px-6 py-4 sm:px-10 border-t border-slate-100 bg-slate-50/50">
           <div className="flex flex-col items-center justify-between gap-2 text-xs text-slate-500 sm:flex-row">
             <div className="flex items-center gap-2">
-              <span>© {new Date().getFullYear()} Rajendra Sports System</span>
+              <span>© {new Date().getFullYear()} Ratechs Sports System</span>
               <span className="text-slate-300">•</span>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img

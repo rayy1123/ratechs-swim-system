@@ -254,7 +254,7 @@ export function ProfileManager({
               </div>
 
               <h1 className="font-heading text-2xl sm:text-3xl font-black text-slate-950 uppercase tracking-tight">
-                {fullName || 'Pengguna Rajendra'}
+                {fullName || 'Pengguna Ratechs'}
               </h1>
 
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1 text-xs text-slate-600">

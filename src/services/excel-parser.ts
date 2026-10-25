@@ -488,7 +488,7 @@ export async function downloadExcelTemplate(): Promise<void> {
   const headerFill: ExcelJS.Fill = {
     type: 'pattern',
     pattern: 'solid',
-    fgColor: { argb: 'FF0284C7' }, // Rajendra Aqua Primary
+    fgColor: { argb: 'FF0284C7' }, // Ratechs Aqua Primary
   };
 
   const headerFont: Partial<ExcelJS.Font> = {
@@ -611,7 +611,7 @@ export async function downloadExcelTemplate(): Promise<void> {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = 'Template_Import_Buku_Acara_Rajendra_Meet.xlsx';
+  anchor.download = 'Template_Import_Buku_Acara_Ratechs_Meet.xlsx';
   document.body.appendChild(anchor);
   anchor.click();
   document.body.removeChild(anchor);

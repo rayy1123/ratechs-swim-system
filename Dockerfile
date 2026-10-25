@@ -1,4 +1,4 @@
-# Multi-stage Dockerfile for High-Scale Rajendra SCMS (Next.js 16)
+# Multi-stage Dockerfile for High-Scale Ratechs SCMS (Next.js 16)
 # Target: 1500+ athletes championship concurrency
 
 # 1. Base dependencies stage

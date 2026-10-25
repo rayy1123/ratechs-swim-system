@@ -263,7 +263,7 @@ const GUIDE_CATEGORIES: GuideCategory[] = [
         step: 15,
         title: 'Kelola Profil Tentang Kami & 5 Pilar',
         href: '/kelola-beranda',
-        badge: 'Branding Rajendra',
+        badge: 'Branding Ratechs',
         description: 'Mengatur deskripsi Ratechs Sports & Event Organizer dan 5 pilar keunggulan.',
         actionItems: [
           'Buka menu Kelola Beranda CMS -> Tab "Tentang Kami" & "Pilar".',

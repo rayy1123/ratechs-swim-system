@@ -4,5 +4,5 @@ select
   p.role
 from auth.users u
 join public.profiles p on p.id = u.id
-where u.email in ('pendaftaran@rajendra.id','penonton@rajendra.id')
+where u.email in ('pendaftaran@ratechs.id','penonton@ratechs.id')
 order by u.email;

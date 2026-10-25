@@ -5,7 +5,7 @@ import { formatMsToTime } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
-export default async function PublicRajendraRecordPage({
+export default async function PublicRatechsRecordPage({
   searchParams,
 }: {
   searchParams: Promise<{ eventId?: string }>;
@@ -72,9 +72,9 @@ export default async function PublicRajendraRecordPage({
     regMap.set(r.id, r);
   });
 
-  // 5. Ambil data rekor resmi di database (rajendra_records)
+  // 5. Ambil data rekor resmi di database (ratechs_records)
   let existingQuery = supabase
-    .from('rajendra_records')
+    .from('ratechs_records')
     .select('id, competition_event_id, time_ms, event_year, athlete_id, is_active')
     .eq('is_active', true);
 
@@ -190,7 +190,7 @@ export default async function PublicRajendraRecordPage({
     const displayName =
       comp.name || `${dist}m ${strokeName} ${grade} (${gender === 'female' ? 'Putri' : 'Putra'})`;
 
-    // Skenario A: Hasil lomba baru memecahkan rekor yang ada di rajendra_records
+    // Skenario A: Hasil lomba baru memecahkan rekor yang ada di ratechs_records
     if (bestResult && existingRec && bestResult.time_ms < existingRec.time_ms) {
       const prevAthlete = existingRec.athleteName || 'Pemegang Rekor Sebelumnya';
       const prevSchool = existingRec.schoolName || null;
@@ -218,7 +218,7 @@ export default async function PublicRajendraRecordPage({
         grade_level: grade,
       });
     }
-    // Skenario B: Rekor di rajendra_records tetap bertahan (tidak ada yang mengalahkan)
+    // Skenario B: Rekor di ratechs_records tetap bertahan (tidak ada yang mengalahkan)
     else if (existingRec) {
       const diffMs =
         bestResult && bestResult.time_ms > existingRec.time_ms
@@ -246,7 +246,7 @@ export default async function PublicRajendraRecordPage({
         grade_level: grade,
       });
     }
-    // Skenario C: Belum ada di rajendra_records, tetapi ada hasil waktu resmi di results
+    // Skenario C: Belum ada di ratechs_records, tetapi ada hasil waktu resmi di results
     else if (bestResult) {
       const secondPlace = resultsList.length > 1 ? resultsList[1] : null;
       const diffMs = secondPlace ? secondPlace.time_ms - bestResult.time_ms : null;

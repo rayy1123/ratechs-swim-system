@@ -117,9 +117,9 @@ begin
   -- 4) audit_log (seed, hanya kalau kosong)
   if not exists (select 1 from audit_log) then
     insert into audit_log (actor_email, action, entity, detail) values
-      ('admin@rajendra.id', 'login', 'System Access', 'Login sukses via SSO.'),
-      ('admin@rajendra.id', 'time_override', 'Event #45, Heat 3, Lane 4', 'Ubah waktu final 24.56 -> 24.52 (touchpad error).'),
-      ('panitia@rajendra.id', 'seeding_edit', 'Event #46, Heat 1', 'Tukar Lane 2 & 3 (scratch mendadak).'),
+      ('admin@ratechs.id', 'login', 'System Access', 'Login sukses via SSO.'),
+      ('admin@ratechs.id', 'time_override', 'Event #45, Heat 3, Lane 4', 'Ubah waktu final 24.56 -> 24.52 (touchpad error).'),
+      ('panitia@ratechs.id', 'seeding_edit', 'Event #46, Heat 1', 'Tukar Lane 2 & 3 (scratch mendadak).'),
       ('unknown@203.0.113.45', 'login', 'System Access', 'Login gagal: password salah.');
   end if;
 

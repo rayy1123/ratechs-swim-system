@@ -244,9 +244,9 @@ create table if not exists public.tie_break_rules (
 );
 
 -- ---------------------------------------------------------------
--- RAJENDRA RECORD
+-- RATECHS RECORD
 -- ---------------------------------------------------------------
-create table if not exists public.rajendra_records (
+create table if not exists public.ratechs_records (
   id                    uuid primary key default gen_random_uuid(),
   competition_event_id  uuid references public.competition_events(id) on delete set null,
   record_key            text not null,   -- stroke|distance|gender|grade|class|age_group
@@ -259,7 +259,7 @@ create table if not exists public.rajendra_records (
 );
 -- Hanya boleh ada satu record aktif per kategori
 create unique index if not exists uniq_active_record
-  on public.rajendra_records(record_key) where is_active;
+  on public.ratechs_records(record_key) where is_active;
 
 -- ---------------------------------------------------------------
 -- SETTINGS & AUDIT

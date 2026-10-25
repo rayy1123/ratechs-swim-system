@@ -320,7 +320,7 @@ export default async function InvoicePage({ params, searchParams }: InvoicePageP
 
   const invoiceData: InvoiceData = {
     invoiceNumber,
-    subject: (mainReg.events as any).name || 'Kejuaraan Renang Rajendra',
+    subject: (mainReg.events as any).name || 'Kejuaraan Renang Ratechs',
     date: dateFormatted,
     dueDate: dueDateFormatted,
     status: latestStatus,

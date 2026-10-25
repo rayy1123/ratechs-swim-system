@@ -82,7 +82,7 @@ alter table public.heat_assignments   enable row level security;
 alter table public.results            enable row level security;
 alter table public.point_rules        enable row level security;
 alter table public.tie_break_rules    enable row level security;
-alter table public.rajendra_records   enable row level security;
+alter table public.ratechs_records   enable row level security;
 alter table public.system_configs     enable row level security;
 alter table public.audit_logs         enable row level security;
 
@@ -134,8 +134,8 @@ create policy heat_assignments_read on public.heat_assignments for select using 
 drop policy if exists results_read on public.results;
 create policy results_read on public.results for select using (true);
 
-drop policy if exists records_read on public.rajendra_records;
-create policy records_read on public.rajendra_records for select using (true);
+drop policy if exists records_read on public.ratechs_records;
+create policy records_read on public.ratechs_records for select using (true);
 
 drop policy if exists age_group_rules_read on public.age_group_rules;
 create policy age_group_rules_read on public.age_group_rules for select using (true);
@@ -295,16 +295,16 @@ create policy tie_break_write on public.tie_break_rules
   with check (public.is_event_admin(event_id));
 
 -- Record ditulis sistem saat hasil disimpan -> operator boleh
-drop policy if exists records_insert on public.rajendra_records;
-create policy records_insert on public.rajendra_records
+drop policy if exists records_insert on public.ratechs_records;
+create policy records_insert on public.ratechs_records
   for insert with check (public.can_operate());
 
-drop policy if exists records_update on public.rajendra_records;
-create policy records_update on public.rajendra_records
+drop policy if exists records_update on public.ratechs_records;
+create policy records_update on public.ratechs_records
   for update using (public.can_operate()) with check (public.can_operate());
 
-drop policy if exists records_delete on public.rajendra_records;
-create policy records_delete on public.rajendra_records
+drop policy if exists records_delete on public.ratechs_records;
+create policy records_delete on public.ratechs_records
   for delete using (public.user_role() in ('event_admin','super_admin'));
 
 drop policy if exists configs_read on public.system_configs;

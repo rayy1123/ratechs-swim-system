@@ -11,7 +11,7 @@ declare
   i record;
   cnt int;
 begin
-  select * into u from auth.users where email = 'admin@rajendra.id';
+  select * into u from auth.users where email = 'admin@ratechs.id';
   if u is null then
     insert into public._diag values ('user','TIDAK ADA');
     return;

@@ -1,4 +1,4 @@
-# PRD: Rajendra Swimming Championship Management System (SCMS)
+# PRD: Ratechs Swimming Championship Management System (SCMS)
 **Product Version:** 2.0 (High-End Edition)  
 **System Architecture:** Next.js 16 (App Router) + TypeScript + Tailwind CSS + Supabase (PostgreSQL)  
 **Core Purpose:** Platform manajemen kejuaraan renang komprehensif berstandar akuatik nasional (Aquatic Indonesia/World Aquatics), live broadcast arena scoreboard, dan sistem tata kelola keuangan multi-event.
@@ -7,7 +7,7 @@
 
 ## 1. Product Vision & Value Proposition
 
-Rajendra SCMS dirancang untuk mentransformasi kejuaraan renang konvensional menjadi ekosistem digital **kelas atas (*High-End*)**, menghadirkan pengalaman pengguna (*UI/UX*) paling elegan, cepat, dan intuitif bagi seluruh pemangku kepentingan:
+Ratechs SCMS dirancang untuk mentransformasi kejuaraan renang konvensional menjadi ekosistem digital **kelas atas (*High-End*)**, menghadirkan pengalaman pengguna (*UI/UX*) paling elegan, cepat, dan intuitif bagi seluruh pemangku kepentingan:
 - **Panitia / Meet Director**: Kendali penuh administrasi kejuaraan dari pendaftaran, seeding nomor lomba, cetak buku acara, hingga rekonsiliasi kas dalam satu dasbor terpadu.
 - **Operator Lomba / Juri**: Input catatan waktu presisi milidetik, live status lane, dan penentuan juara otomatis.
 - **Klub / Kontingen / Pelatih**: Pendaftaran atlet massal via Excel, nomor dada/atlet otomatis, dan tagihan invoice resmi transparan.
@@ -63,7 +63,7 @@ Rajendra SCMS dirancang untuk mentransformasi kejuaraan renang konvensional menj
 ### Epic 5: Manajemen Keuangan, Tagihan Klub, & Invoicing
 - **Tujuan**: Transparansi finansial menyeluruh dan efisiensi penagihan klub.
 - **Spesifikasi**:
-  - **Invoice Resmi Multi-event (`/invoice/[id]`)**: Template invoice berstandar korporat Rajendra Meet dengan rincian biaya per nomor, kode unik transfer, rekening tujuan, dan tanda tangan digital.
+  - **Invoice Resmi Multi-event (`/invoice/[id]`)**: Template invoice berstandar korporat Ratechs Meet dengan rincian biaya per nomor, kode unik transfer, rekening tujuan, dan tanda tangan digital.
   - **Rekap Tagihan Klub (`/tagihan`)**: Tampilan per-klub dengan indikator status pembayaran (Belum Bayar, Menunggu Verifikasi, Lunas) serta opsi cetak rekapitulasi.
   - **Laporan Keuangan Kasir & Pengeluaran (`/report`, `/expenses`)**: Kartu laba bersih, grafik mutasi transaksi, filter periode, dan ekspor instan ke format Excel/CSV.
 

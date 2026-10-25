@@ -52,7 +52,7 @@ function realisticTime(stroke, dist) {
 function rnd(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
 async function main() {
-  const { error: e0 } = await sb.auth.signInWithPassword({ email: 'admin@rajendra.id', password: 'Rajendra#2026' });
+  const { error: e0 } = await sb.auth.signInWithPassword({ email: 'admin@ratechs.id', password: 'Ratechs#2026' });
   if (e0) throw new Error('LOGIN GAGAL: ' + e0.message);
 
   // 1. Rename schools

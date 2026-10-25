@@ -41,7 +41,7 @@ export function BrandedLoading({
       </div>
       <div className="flex flex-col items-center justify-center text-center space-y-0.5">
         <span className="font-heading font-black text-sm tracking-wider uppercase text-slate-900">
-          RAJENDRA <span className="text-[#0284c7]">SWIM SYSTEM</span>
+          RATECHS <span className="text-[#0284c7]">SWIM SYSTEM</span>
         </span>
         {text && text !== 'RATECHS SWIM SYSTEM' && (
           <p className="font-heading text-[11px] font-semibold text-[var(--m-muted)] animate-pulse">

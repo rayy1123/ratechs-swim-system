@@ -22,7 +22,7 @@ declare
     'legacy_heats',
     'legacy_heat_assignments',
     'legacy_results',
-    'legacy_rajendra_records',
+    'legacy_ratechs_records',
     'legacy_registration_map',
     'users',
     'sessions',

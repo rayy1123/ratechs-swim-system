@@ -308,7 +308,7 @@ export function MobileSidebar({ role }: { role?: string }) {
                 className="h-7 w-auto object-contain"
               />
               <span className="font-heading font-black text-sm text-[var(--m-ink)]">
-                Rajendra <span className="text-[var(--m-aqua)]">Swim System</span>
+                Ratechs <span className="text-[var(--m-aqua)]">Swim System</span>
               </span>
             </div>
             <SheetTitle className="sr-only">Navigasi Ratechs Swim System</SheetTitle>

@@ -11,7 +11,7 @@ export interface GalleryPhotoItem {
   alt: string;
 }
 
-// ── ROW 1: 11 FOTO ASLI AKSI KOLAM DARI RAJENDRARENANG.COM ──
+// ── ROW 1: 11 FOTO ASLI AKSI KOLAM DARI RATECHS.ID ──
 export const DEFAULT_ACTION_PHOTOS: GalleryPhotoItem[] = [
   { id: 'act-1', imageSrc: '/gallery/swiper1.jpg', fallbackSrc: '/slider/hero-1.jpg', alt: 'Aksi perlombaan renang Ratechs Swim System 1' },
   { id: 'act-2', imageSrc: '/gallery/swiper2.jpg', fallbackSrc: '/slider/hero-2.jpg', alt: 'Aksi perlombaan renang Ratechs Swim System 2' },
@@ -26,7 +26,7 @@ export const DEFAULT_ACTION_PHOTOS: GalleryPhotoItem[] = [
   { id: 'act-11', imageSrc: '/gallery/swiper11.jpg', fallbackSrc: '/slider/hero-4.jpg', alt: 'Aksi perlombaan renang Ratechs Swim System 11' },
 ];
 
-// ── ROW 2: 11 FOTO ASLI JUARA & PODIUM DARI RAJENDRARENANG.COM ──
+// ── ROW 2: 11 FOTO ASLI JUARA & PODIUM DARI RATECHS.ID ──
 export const DEFAULT_PODIUM_PHOTOS: GalleryPhotoItem[] = [
   { id: 'pod-1', imageSrc: '/gallery/swiper17.jpg', fallbackSrc: '/slider/about-2.jpg', alt: 'Juara dan medalis kejuaraan renang 1' },
   { id: 'pod-2', imageSrc: '/gallery/swiper18.jpg', fallbackSrc: '/slider/about-4.jpg', alt: 'Juara dan medalis kejuaraan renang 2' },

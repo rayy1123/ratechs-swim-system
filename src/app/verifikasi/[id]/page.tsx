@@ -132,7 +132,7 @@ export default async function CertificateVerificationDetailPage({
       const bDate = targetAthlete?.birth_date ? new Date(targetAthlete.birth_date) : new Date();
       const ageGroup = calculateAgeCategory(bDate);
 
-      const eventName = targetEvent?.name || 'Rajendra Swimming Championship 2026';
+      const eventName = targetEvent?.name || 'Ratechs Swimming Championship 2026';
       const eventDate = targetEvent?.start_date
         ? new Date(targetEvent.start_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
         : 'Oktober 2026';
@@ -168,7 +168,7 @@ export default async function CertificateVerificationDetailPage({
         isNewRecord: finishTimeMs < 30000,
         verifiedAt: new Date().toISOString(),
         technicalDelegate: 'Technical Delegate Sanctioned',
-        chairmanName: 'Panitia Pelaksana Rajendra SCMS',
+        chairmanName: 'Panitia Pelaksana Ratechs SCMS',
       };
     } else {
       // Sample mock verified data if searching a sample/generic test id
@@ -180,7 +180,7 @@ export default async function CertificateVerificationDetailPage({
         schoolName: 'Hiu Akuatik',
         gender: 'male',
         ageGroup: 'KU IV (10-11 Th)',
-        eventName: 'Rajendra National Aquatic Championship 2026',
+        eventName: 'Ratechs National Aquatic Championship 2026',
         eventDate: '16 Oktober 2026',
         eventLocation: 'Kolam Renang Selayang',
         competitionEventName: '25m Gaya Dada SD Kelas 4 Putra',

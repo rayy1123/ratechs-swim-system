@@ -8,4 +8,4 @@ select
   encrypted_password is not null as has_pw,
   (select count(*) from auth.identities i where i.user_id = u.id) as ident_count
 from auth.users u
-where email in ('panitia@rajendra.id','penonton@rajendra.id','admin@rajendra.id');
+where email in ('panitia@ratechs.id','penonton@ratechs.id','admin@ratechs.id');

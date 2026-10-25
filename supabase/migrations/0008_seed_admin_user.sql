@@ -5,8 +5,8 @@
 -- Laravel lama). Migrasi ini membuat satu akun super_admin supaya
 -- panitia bisa masuk pertama kali, lalu menambah user lain dari UI.
 --
---   Email    : admin@rajendra.id
---   Password : Rajendra#2026
+--   Email    : admin@ratechs.id
+--   Password : Ratechs#2026
 --
 -- GANTI PASSWORD INI setelah login pertama.
 --
@@ -18,8 +18,8 @@
 do $$
 declare
   v_user_id uuid;
-  v_email   text := 'admin@rajendra.id';
-  v_pass    text := 'Rajendra#2026';
+  v_email   text := 'admin@ratechs.id';
+  v_pass    text := 'Ratechs#2026';
 begin
   -- pgcrypto menyediakan crypt() untuk hash bcrypt
   create extension if not exists pgcrypto with schema extensions;

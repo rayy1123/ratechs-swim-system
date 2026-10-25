@@ -14,7 +14,7 @@ export function AthleteParticipantCard({
 }) {
   const { athlete, event, races } = data;
 
-  const verificationPayload = `RAJENDRA-MEET:PASS:${athlete.athleteNumber}:${event.id}:${races.length}RACES`;
+  const verificationPayload = `RATECHS-MEET:PASS:${athlete.athleteNumber}:${event.id}:${races.length}RACES`;
 
   return (
     <div
@@ -27,7 +27,7 @@ export function AthleteParticipantCard({
         breakInside: 'avoid',
       }}
     >
-      {/* ── 1. ORNAMEN WATERMARK GELOMBANG AKUATIK RAJENDRA ── */}
+      {/* ── 1. ORNAMEN WATERMARK GELOMBANG AKUATIK RATECHS ── */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-[0.04] print:opacity-[0.06] z-0">
         <svg viewBox="0 0 320 320" className="h-[280px] w-[280px] text-[#0f2b5c]">
           <circle cx="160" cy="160" r="150" fill="none" stroke="currentColor" strokeWidth="2.5" strokeDasharray="6 3" />
@@ -40,7 +40,7 @@ export function AthleteParticipantCard({
             <path d="M4 30 Q 16 25, 26 30 T 48 30" />
           </g>
           <text x="160" y="222" textAnchor="middle" fontSize="13" fontWeight="900" letterSpacing="0.25em" fill="#0f2b5c">
-            RAJENDRA SWIMSYS
+            RATECHS SWIMSYS
           </text>
           <text x="160" y="238" textAnchor="middle" fontSize="7.5" fontWeight="800" letterSpacing="0.18em" fill="#b48a3c">
             OFFICIAL ATHLETE PASS
@@ -73,7 +73,7 @@ export function AthleteParticipantCard({
             />
             <div className="min-w-0">
               <p className="text-[9px] font-black uppercase tracking-wider text-cyan-200 flex items-center gap-1">
-                <Waves className="h-3 w-3" /> RAJENDRA SWIMMING CHAMPIONSHIP
+                <Waves className="h-3 w-3" /> RATECHS SWIMMING CHAMPIONSHIP
               </p>
               {/* NAMA EVENT */}
               <h2 className="text-xs sm:text-sm font-black uppercase tracking-tight text-white truncate drop-shadow-xs">
@@ -243,15 +243,15 @@ export function AthleteParticipantCard({
                 Validasi Petugas via No. Dada #{athlete.athleteNumber}
               </p>
               <p className="text-[8px] text-blue-700 font-mono font-bold">
-                ID Pass: RM-PASS-{athlete.athleteNumber}
+                ID Pass: RT-PASS-{athlete.athleteNumber}
               </p>
             </div>
           </div>
 
-          {/* Stempel Elemen Sanction Rajendra SwimSystem */}
+          {/* Stempel Elemen Sanction Ratechs SwimSystem */}
           <div className="text-right space-y-0.5">
             <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[9px] font-black tracking-wider uppercase bg-blue-50 text-blue-950 border border-blue-300 shadow-2xs">
-              <ShieldCheck className="h-3 w-3 text-blue-600" /> RAJENDRA SANCTIONED
+              <ShieldCheck className="h-3 w-3 text-blue-600" /> RATECHS SANCTIONED
             </div>
             <p className="text-[8px] font-mono font-bold text-slate-400">
               OFFICIAL COMPETITION PASS
