@@ -1,0 +1,50 @@
+'use client';
+
+import { useState, useTransition } from 'react';
+import { CheckCircle2, XCircle } from 'lucide-react';
+import { updatePaymentStatus } from '@/app/(dashboard)/verifikasi-pembayaran/actions';
+import { toast } from 'sonner';
+
+export function PaymentVerifyActions({ id }: { id: string }) {
+  const [pending, startTransition] = useTransition();
+  const [busy, setBusy] = useState<'approve' | 'reject' | null>(null);
+
+  function run(status: 'verified' | 'rejected') {
+    setBusy(status === 'verified' ? 'approve' : 'reject');
+    const fd = new FormData();
+    fd.set('id', id);
+    fd.set('status', status);
+    startTransition(async () => {
+      const res = await updatePaymentStatus(fd);
+      if (res.ok) {
+        toast.success(status === 'verified' ? 'Pembayaran berhasil diverifikasi/disetujui.' : 'Pembayaran ditolak.');
+      } else {
+        toast.error(res.error ?? 'Gagal memproses verifikasi.');
+        setBusy(null);
+      }
+    });
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <button
+        type="button"
+        onClick={() => run('verified')}
+        disabled={pending}
+        className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white transition-ui hover:bg-emerald-700 disabled:opacity-60 cursor-pointer"
+      >
+        <CheckCircle2 className="h-3.5 w-3.5" />
+        {busy === 'approve' && pending ? 'Memproses...' : 'Setuju'}
+      </button>
+      <button
+        type="button"
+        onClick={() => run('rejected')}
+        disabled={pending}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 transition-ui hover:bg-red-100 disabled:opacity-60 cursor-pointer"
+      >
+        <XCircle className="h-3.5 w-3.5" />
+        {busy === 'reject' && pending ? 'Memproses...' : 'Tolak'}
+      </button>
+    </div>
+  );
+}

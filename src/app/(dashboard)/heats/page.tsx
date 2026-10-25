@@ -1,0 +1,125 @@
+import { createClient } from '@/lib/supabase/server';
+import { HeatGeneratorOperator } from '@/components/modules/heat-generator-operator';
+import { Layers } from 'lucide-react';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { EmptyState } from '@/components/ui/empty-state';
+
+// Definisi Interface untuk Type Safety
+export interface RegistrationItem {
+  id: string;
+  seed_time_ms: number | null;
+  athletes: {
+    id: string;
+    full_name: string;
+    athlete_number: string;
+    schools: { name: string } | null;
+  } | null;
+}
+
+export interface HeatItem {
+  id: string;
+  heat_number: number;
+  heat_assignments: {
+    id: string;
+    lane_number: number;
+    registration_id: string;
+  }[];
+}
+
+export default async function HeatsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ eventId?: string; compEventId?: string }>;
+}) {
+  const supabase = await createClient();
+  const params = await searchParams;
+
+  // 1. Ambil daftar event aktif
+  const { data: events } = await supabase
+    .from('events')
+    .select('id, name, lane_count')
+    .order('created_at', { ascending: false });
+
+  const activeEventId = params.eventId || events?.[0]?.id || '';
+  const currentEvent = events?.find((e) => e.id === activeEventId) || events?.[0];
+
+  // 2. Ambil daftar nomor lomba untuk event aktif
+  const { data: compEvents } = await supabase
+    .from('competition_events')
+    .select('id, name, stroke, distance_meters, gender, grade_level, class_name')
+    .eq('event_id', activeEventId);
+
+  // Validasi agar compEventId benar-benar milik event yang aktif
+  const isValidCompEvent = compEvents?.some((ce) => ce.id === params.compEventId);
+  const activeCompEventId = isValidCompEvent ? params.compEventId! : compEvents?.[0]?.id || '';
+
+  // 3. Ambil pendaftaran atlet & status heat yang ada
+  let registrations: RegistrationItem[] = [];
+  let existingHeats: HeatItem[] = [];
+
+  if (activeCompEventId) {
+    const [{ data: regs }, { data: heats }] = await Promise.all([
+      supabase
+        .from('registrations')
+        .select(`
+          id,
+          athlete_id,
+          seed_time_ms,
+          athletes (
+            id,
+            full_name,
+            athlete_number,
+            schools (name)
+          )
+        `)
+        .eq('competition_event_id', activeCompEventId)
+        .order('seed_time_ms', { ascending: true }),
+      supabase
+        .from('heats')
+        .select(`
+          id,
+          heat_number,
+          heat_assignments (
+            id,
+            lane_number,
+            registration_id
+          )
+        `)
+        .eq('competition_event_id', activeCompEventId)
+        .order('heat_number', { ascending: true }),
+    ]);
+
+    registrations = (regs as unknown as RegistrationItem[]) || [];
+    existingHeats = (heats as unknown as HeatItem[]) || [];
+  }
+
+  return (
+    <div className="mx-auto max-w-7xl space-y-6 p-6">
+      <Breadcrumb items={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Acara & Heat' }]} className="mb-2" />
+      <PageHeader
+        title="Auto-Acara Generator"
+        description="Bagi peserta lomba ke dalam Acara dan Lintasan secara otomatis menggunakan algoritma Spearhead Seeding standar FINA/Aquatics."
+        icon={<Layers className="h-6 w-6" />}
+      />
+
+      {!events || events.length === 0 ? (
+        <EmptyState
+          icon={<Layers className="h-6 w-6" />}
+          title="Belum ada event"
+          description="Silakan buat event atau impor Buku Acara Excel terlebih dahulu untuk mulai menyusun acara & lintasan."
+        />
+      ) : (
+        <HeatGeneratorOperator
+          events={events}
+          compEvents={compEvents || []}
+          initialEventId={activeEventId}
+          initialCompEventId={activeCompEventId}
+          registrations={registrations}
+          existingHeats={existingHeats}
+          laneCount={currentEvent?.lane_count || 8}
+        />
+      )}
+    </div>
+  );
+}

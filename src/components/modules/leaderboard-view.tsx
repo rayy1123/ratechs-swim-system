@@ -1,0 +1,511 @@
+'use client';
+
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { formatMsToTime, cn } from '@/lib/utils';
+import { rankResults, type RankableResult, type ResultStatus } from '@/services/ranking';
+import { Trophy, ListOrdered, Layers, Timer, CheckCircle2, Search, X, Radio } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+
+export interface CompEvent {
+  id: string;
+  name: string;
+  stroke: string | null;
+  distance_meters: number | null;
+  gender: string | null;
+  grade_level: string | null;
+  class_name: string | null;
+}
+
+interface RawAssignment {
+  id: string;
+  lane_number: number;
+  results?: { id?: string | null; time_ms?: number | null; status?: string | null }[] | null;
+  registrations?: {
+    id?: string | null;
+    seed_time_ms?: number | null;
+    athletes?: {
+      full_name?: string | null;
+      athlete_number?: string | null;
+      schools?: { name?: string | null } | null;
+    } | null;
+  } | null;
+}
+
+interface RawHeat {
+  id: string;
+  heat_number: number;
+  heat_assignments?: RawAssignment[] | null;
+}
+
+interface HeatGroup {
+  id: string;
+  heat_number: number;
+  lane_number: number;
+  registration_id: string | null;
+  seed_time_ms: number | null;
+  athlete_name: string | null;
+  athlete_number: string | null;
+  school_name: string | null;
+  result_id: string | null;
+  time_ms: number | null;
+  status: string | null;
+}
+
+interface LeaderboardViewProps {
+  eventId: string;
+  compEvents: CompEvent[];
+  /** Bila true, tidak menampilkan header judul (dipakai di dalam kartu event). */
+  embedded?: boolean;
+  /** Tampilkan tab Per Acara (berguna di halaman live penuh). */
+  showHeatTab?: boolean;
+}
+
+const STATUS_LABEL: Record<string, string> = {
+  dns: 'DNS',
+  dnf: 'DNF',
+  dq: 'DQ',
+  scr: 'SCR',
+};
+
+export function LeaderboardView({ compEvents, embedded, showHeatTab = true }: LeaderboardViewProps) {
+  const supabase = useMemo(() => createClient(), []);
+  const [selectedCompEventId, setSelectedCompEventId] = useState<string>(compEvents[0]?.id || '');
+  const [heats, setHeats] = useState<HeatGroup[]>([]);
+  const [tab, setTab] = useState<'rank' | 'heat'>('rank');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [lastSyncTime, setLastSyncTime] = useState<string>('Baru saja');
+
+  const fetchData = useCallback(async () => {
+    if (!selectedCompEventId) return;
+    const { data } = await supabase
+      .from('heats')
+      .select(`
+        id,
+        heat_number,
+        heat_assignments (
+          id,
+          lane_number,
+          registrations (
+            id,
+            seed_time_ms,
+            athletes ( full_name, athlete_number, schools (name) )
+          ),
+          results ( id, time_ms, status )
+        )
+      `)
+      .eq('competition_event_id', selectedCompEventId)
+      .order('heat_number', { ascending: true });
+
+    const allAssignIds = (data || []).flatMap((h: any) =>
+      (h.heat_assignments || []).map((a: any) => a.id)
+    );
+
+    const directResultsMap: Record<string, { id: string; time_ms: number | null; status: string }> = {};
+    if (allAssignIds.length > 0) {
+      const { data: dbRes } = await supabase
+        .from('results')
+        .select('id, heat_assignment_id, time_ms, status')
+        .in('heat_assignment_id', allAssignIds);
+      if (dbRes) {
+        dbRes.forEach((r: any) => {
+          directResultsMap[r.heat_assignment_id] = r;
+        });
+      }
+    }
+
+    const flat: HeatGroup[] = (data || []).flatMap((h: RawHeat) =>
+      (h.heat_assignments || []).map((a: RawAssignment) => {
+        const direct = directResultsMap[a.id];
+        return {
+          id: h.id,
+          heat_number: h.heat_number,
+          lane_number: a.lane_number,
+          registration_id: a.registrations?.id ?? null,
+          seed_time_ms: a.registrations?.seed_time_ms ?? null,
+          athlete_name: a.registrations?.athletes?.full_name ?? null,
+          athlete_number: a.registrations?.athletes?.athlete_number ?? null,
+          school_name: a.registrations?.athletes?.schools?.name ?? null,
+          result_id: direct?.id ?? a.results?.[0]?.id ?? null,
+          time_ms: direct?.time_ms ?? a.results?.[0]?.time_ms ?? null,
+          status: direct?.status ?? a.results?.[0]?.status ?? null,
+        };
+      })
+    );
+    setHeats(flat);
+    setLastSyncTime(new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB');
+  }, [selectedCompEventId, supabase]);
+
+  useEffect(() => {
+    if (selectedCompEventId) fetchData();
+    const channel = supabase
+      .channel(`leaderboard-${selectedCompEventId}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'results' }, () => fetchData())
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [selectedCompEventId, fetchData, supabase]);
+
+  const selectedComp = compEvents.find((c) => c.id === selectedCompEventId);
+
+  // Urutkan nomor lomba berdasar jenjang usia: PAUD/TK → SD Kelas 1-6 → SMP → SMA,
+  // lalu gender (Putra dulu), lalu jarak & gaya.
+  const sortedCompEvents = useMemo(() => {
+    const ageRank = (g: string | null): number => {
+      const k = (g || '').toUpperCase();
+      if (k === 'PAUD/TK' || k === 'TK') return 0;
+      if (k === 'SD') return 1;
+      if (k === 'SMP') return 7;
+      if (k === 'SMA') return 8;
+      return 99;
+    };
+    const genderRank = (g: string | null) => (g === 'female' ? 1 : 0);
+    return [...compEvents].sort((a, b) => {
+      const ra = ageRank(a.grade_level), rb = ageRank(b.grade_level);
+      if (ra !== rb) return ra - rb;
+      if (a.grade_level === 'SD' && b.grade_level === 'SD') {
+        const na = parseInt((a.class_name || '').replace(/\D/g, ''), 10) || 0;
+        const nb = parseInt((b.class_name || '').replace(/\D/g, ''), 10) || 0;
+        if (na !== nb) return na - nb;
+      }
+      const ga = genderRank(a.gender), gb = genderRank(b.gender);
+      if (ga !== gb) return ga - gb;
+      const da = a.distance_meters ?? 0, db = b.distance_meters ?? 0;
+      if (da !== db) return da - db;
+      return (a.stroke || '').localeCompare(b.stroke || '');
+    });
+  }, [compEvents]);
+
+  // Ringkasan live
+  const total = heats.length;
+  const finished = heats.filter((h) => {
+    const s = (h.status || 'finished').toLowerCase();
+    return s === 'finished';
+  }).length;
+  const hasResult = (h: HeatGroup) => h.result_id !== null;
+  const bestTime = useMemo(() => {
+    const times = heats.filter((h) => hasResult(h) && (h.status || 'finished').toLowerCase() !== 'dns' && (h.status || 'finished').toLowerCase() !== 'dnf' && (h.status || 'finished').toLowerCase() !== 'dq').map((h) => h.time_ms).filter((t): t is number => t != null);
+    return times.length ? Math.min(...times) : null;
+  }, [heats]);
+
+  // Peringkat lintas heat
+  const ranked = useMemo(() => {
+    const input: RankableResult[] = heats.map((h) => {
+      const raw = (h.status || 'finished').toLowerCase();
+      const isFinished = raw === 'finished';
+      const status: ResultStatus = isFinished ? 'finished' : (raw as ResultStatus);
+      return {
+        registration_id: h.registration_id || h.id,
+        time_ms: isFinished ? h.time_ms : null,
+        status,
+      };
+    });
+    return rankResults(input);
+  }, [heats]);
+
+  const rankByReg = useMemo(() => {
+    const m = new Map<string, number | null>();
+    ranked.forEach((r) => m.set(r.registration_id, r.rank));
+    return m;
+  }, [ranked]);
+
+  const cleanQuery = searchQuery.trim().toLowerCase();
+
+  const displayRanked = useMemo(() => {
+    if (!cleanQuery) return ranked;
+    return ranked.filter((r) => {
+      const h = heats.find((x) => (x.registration_id || x.id) === r.registration_id);
+      return (
+        h?.athlete_name?.toLowerCase().includes(cleanQuery) ||
+        h?.school_name?.toLowerCase().includes(cleanQuery) ||
+        h?.athlete_number?.toLowerCase().includes(cleanQuery)
+      );
+    });
+  }, [ranked, heats, cleanQuery]);
+
+  const heatsSorted = useMemo(
+    () => [...heats].sort((a, b) => a.heat_number - b.heat_number || a.lane_number - b.lane_number),
+    [heats]
+  );
+
+  const heatCount = useMemo(() => new Set(heats.map((h) => h.heat_number)).size, [heats]);
+
+  if (compEvents.length === 0) {
+    return (
+      <div className="rounded-2xl border border-dashed border-[var(--m-border)] bg-[var(--m-surface)] px-6 py-14 text-center text-sm text-[var(--m-muted)]">
+        Belum ada nomor lomba untuk kejuaraan ini.
+      </div>
+    );
+  }
+
+  return (
+    <div className={embedded ? 'space-y-3' : 'space-y-6'}>
+      {/* Pilihan nomor lomba / acara */}
+      <div className="pub-card flex flex-col gap-3 p-4 sm:p-5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="pub-eyebrow">Pilih Acara / Nomor Lomba</p>
+          <div className="flex items-center gap-2">
+            <span className="pub-chip" title={`Waktu update terakhir: ${lastSyncTime}`}>
+              <span className="relative inline-flex h-3.5 w-3.5 items-center justify-center overflow-hidden">
+                <span className="absolute inline-flex h-3.5 w-3.5 animate-ping rounded-full bg-emerald-400" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              </span>
+              <span className="font-mono text-[11px] font-bold text-emerald-800">Live Sync</span>
+            </span>
+            {total > 0 && (
+              <span className="pub-chip">
+                <Layers className="h-3.5 w-3.5 text-[var(--m-aqua)]" /> {heatCount} Acara
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <select
+            value={selectedCompEventId}
+            onChange={(e) => { setSelectedCompEventId(e.target.value); setTab('rank'); }}
+            className="flex-1 rounded-xl border border-[var(--m-border)] bg-[var(--m-surface)] px-3.5 py-2.5 text-sm font-semibold text-[var(--m-ink)] shadow-sm transition-colors hover:border-[var(--m-aqua)] focus:border-[var(--m-aqua)] focus:outline-none focus:ring-2 focus:ring-[var(--m-aqua)]/20"
+          >
+            {sortedCompEvents.map((ce) => {
+              const usia =
+                ce.grade_level === 'TK'
+                  ? 'PAUD/TK'
+                  : ce.grade_level === 'SD' && ce.class_name
+                    ? `SD ${ce.class_name}`
+                    : ce.grade_level || '';
+              const gender = ce.gender === 'female' ? 'Putri' : 'Putra';
+              return (
+                <option key={ce.id} value={ce.id}>
+                  {ce.distance_meters}m {ce.stroke} · {usia} · {gender}
+                </option>
+              );
+            })}
+          </select>
+
+          {/* Quick Athlete Search Bar */}
+          <div className="relative w-full sm:w-72">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Cari atlet / klub / no. dada..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-8 h-10 rounded-xl border border-[var(--m-border)] bg-[var(--m-surface)] text-xs text-[var(--m-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--m-aqua)]/20"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {total === 0 ? (
+        <div className="rounded-2xl border border-dashed border-[var(--m-border)] bg-[var(--m-surface)] px-6 py-14 text-center text-sm text-[var(--m-muted)]">
+          Belum ada Acara / Jadwal Lomba untuk nomor ini.
+        </div>
+      ) : (
+        <>
+          {/* Baris ringkasan */}
+          <div className="grid grid-cols-3 gap-3">
+            <Stat icon={<Layers className="h-4 w-4" />} label="Peserta" value={String(total)} />
+            <Stat icon={<CheckCircle2 className="h-4 w-4" />} label="Selesai" value={`${finished}/${total}`} />
+            <Stat icon={<Timer className="h-4 w-4" />} label="Waktu Terbaik" value={bestTime ? formatMsToTime(bestTime) : '—'} />
+          </div>
+
+          {/* Ringkasan akumulasi heat */}
+          {total > 0 && (
+            <p className="pub-eyebrow">
+              Akumulasi {heatCount} Acara • {total} Peserta Lintas Acara — Peringkat Dihitung Otomatis
+            </p>
+          )}
+
+          {/* Tab */}
+          {showHeatTab && (
+            <div className="inline-flex rounded-xl border border-[var(--m-border)] bg-[var(--m-surface)] p-1 shadow-sm">
+              <TabBtn active={tab === 'rank'} onClick={() => setTab('rank')} icon={<ListOrdered className="h-4 w-4" />} label="Peringkat" />
+              <TabBtn active={tab === 'heat'} onClick={() => setTab('heat')} icon={<Layers className="h-4 w-4" />} label="Akumulasi Acara" />
+            </div>
+          )}
+
+          {tab === 'rank' ? (
+            <div className="pub-card overflow-hidden">
+              {!embedded && (
+                <div className="flex items-center justify-between border-b border-[var(--m-border)] bg-[var(--m-aqua-soft)] px-4 py-3">
+                  <h2 className="flex items-center gap-2 text-base font-bold text-[var(--m-ink)]">
+                    <Trophy className="h-5 w-5 text-amber-500" />
+                    {selectedComp?.distance_meters}m {selectedComp?.stroke} {selectedComp?.grade_level}
+                  </h2>
+                  <span className="pub-chip">{total} Atlet</span>
+                </div>
+              )}
+              <div className="divide-y divide-[var(--m-border)]">
+                {displayRanked.length === 0 ? (
+                  <div className="p-8 text-center text-xs text-[var(--m-muted)]">
+                    Tidak ditemukan atlet dengan kata kunci &quot;{searchQuery}&quot;.
+                  </div>
+                ) : (
+                  displayRanked.map((r, idx) => {
+                    const h = heats.find((x) => (x.registration_id || x.id) === r.registration_id);
+                    const isDnf = r.status !== 'finished';
+                    const rankClass = r.rank === 1 ? 'rank-1' : r.rank === 2 ? 'rank-2' : r.rank === 3 ? 'rank-3' : 'rank-n';
+                    const isZebra = idx % 2 === 1;
+
+                    return (
+                      <div
+                        key={r.registration_id}
+                        className={cn(
+                          'flex items-stretch gap-3 px-3 py-3 transition-colors hover:bg-[var(--m-aqua-soft)] sm:px-4',
+                          isZebra ? 'bg-slate-50/50' : 'bg-white'
+                        )}
+                      >
+                        <span className={`${rankClass} h-auto w-9 shrink-0 self-center`}>{r.rank ?? '–'}</span>
+                        <span className="flex w-9 shrink-0 self-center flex-col items-center justify-center rounded-lg bg-[var(--m-aqua-soft)] py-1 text-[var(--m-aqua-ink)] border border-[var(--m-aqua)]/20 shadow-2xs">
+                          <span className="text-[9px] font-semibold uppercase leading-none">Lane</span>
+                          <span className="text-base font-black leading-none">{h?.lane_number ?? '-'}</span>
+                          <span className="mt-0.5 text-[8px] font-medium leading-none text-[var(--m-muted)]">Acara {h?.heat_number}</span>
+                        </span>
+                        <div className="min-w-0 flex-1 self-center">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <h4 className="truncate text-base font-bold text-[var(--m-ink)]">{h?.athlete_name || 'Lintasan Kosong'}</h4>
+                            {h?.athlete_number && (
+                              <span className="font-mono text-[10px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200">
+                                #{h.athlete_number}
+                              </span>
+                            )}
+                          </div>
+                          <p className="truncate text-xs text-[var(--m-muted)] mt-0.5">{h?.school_name || 'Umum'}</p>
+                        </div>
+                        <div className="flex shrink-0 flex-col items-end justify-center gap-0.5">
+                          <span className="pub-time text-xl leading-none text-[var(--m-aqua-ink)] sm:text-2xl font-mono font-bold">
+                            {isDnf ? (
+                              <Badge variant="destructive" className="font-mono text-xs font-bold uppercase">{STATUS_LABEL[r.status] || r.status}</Badge>
+                            ) : h?.time_ms ? (
+                              formatMsToTime(h.time_ms)
+                            ) : (
+                              <span className="text-sm text-[var(--m-muted)]">—</span>
+                            )}
+                          </span>
+                          <span className="text-[10px] font-medium uppercase tracking-wide text-[var(--m-muted)]">Seed {formatMsToTime(h?.seed_time_ms)}</span>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {Array.from(new Set(heatsSorted.map((h) => h.heat_number)))
+                .sort((a, b) => a - b)
+                .map((hn) => {
+                  const lanes = heatsSorted.filter((h) => h.heat_number === hn);
+                  const heatDone = lanes.every((l) => l.result_id !== null);
+                  return (
+                    <div key={hn} className="pub-card overflow-hidden">
+                      <div className="flex items-center justify-between border-b border-[var(--m-border)] bg-[var(--m-aqua-soft)] px-4 py-2.5">
+                        <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-[var(--m-ink)]">
+                          <Layers className="h-4 w-4 text-[var(--m-aqua-ink)]" /> Acara {hn}
+                        </h3>
+                        <span className={`pub-chip ${heatDone ? 'text-emerald-600' : 'text-[var(--m-muted)]'}`}>
+                          {heatDone ? 'Selesai' : 'Berlangsung'}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 gap-px bg-[var(--m-border)] sm:grid-cols-2">
+                        {lanes.map((l) => {
+                          const raw = (l.status || 'finished').toLowerCase();
+                          const isDnf = raw !== 'finished';
+                          const rank = rankByReg.get(l.registration_id || l.id);
+                          const isMatch =
+                            !cleanQuery ||
+                            Boolean(
+                              l.athlete_name?.toLowerCase().includes(cleanQuery) ||
+                              l.school_name?.toLowerCase().includes(cleanQuery) ||
+                              l.athlete_number?.toLowerCase().includes(cleanQuery)
+                            );
+
+                          return (
+                            <div
+                              key={l.id}
+                              className={cn(
+                                'flex items-stretch gap-2.5 px-3 py-2.5 sm:px-4 transition-colors',
+                                isMatch && cleanQuery
+                                  ? 'bg-amber-100/70 ring-1 ring-amber-300 font-semibold'
+                                  : 'bg-[var(--m-surface)] hover:bg-slate-50'
+                              )}
+                            >
+                              <span className="flex w-8 shrink-0 self-center flex-col items-center justify-center rounded-lg bg-[var(--m-aqua-soft)] py-1 text-[var(--m-aqua-ink)] border border-[var(--m-aqua)]/20 shadow-2xs">
+                                <span className="text-[8px] font-semibold uppercase leading-none">Lane</span>
+                                <span className="text-sm font-black leading-none">{l.lane_number}</span>
+                              </span>
+                              <div className="min-w-0 flex-1 self-center">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <p className="truncate text-sm font-bold text-[var(--m-ink)]">{l.athlete_name || 'Kosong'}</p>
+                                  {l.athlete_number && (
+                                    <span className="font-mono text-[10px] font-bold text-blue-700 bg-blue-50 px-1 py-0.2 rounded border border-blue-200">
+                                      #{l.athlete_number}
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="truncate text-xs text-[var(--m-muted)] mt-0.5">{l.school_name || 'Umum'}</p>
+                              </div>
+                              <div className="flex shrink-0 flex-col items-end justify-center gap-0.5">
+                                <div className="flex items-center gap-1">
+                                  {isDnf && l.status ? (
+                                    <Badge variant="destructive" className="font-mono text-[10px] font-bold uppercase rounded">{STATUS_LABEL[l.status] || l.status}</Badge>
+                                  ) : l.time_ms ? (
+                                    <span className="pub-time text-sm text-[var(--m-aqua-ink)]">{formatMsToTime(l.time_ms)}</span>
+                                  ) : (
+                                    <span className="text-xs text-[var(--m-muted)]">—</span>
+                                  )}
+                                  {rank && !isDnf && (
+                                    <span className={`ml-0.5 flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${rank <= 3 ? 'bg-amber-100 text-amber-700' : 'bg-[var(--m-aqua-soft)] text-[var(--m-aqua-ink)]'}`}>{rank}</span>
+                                  )}
+                                </div>
+                                <span className="text-[10px] font-medium uppercase tracking-wide text-[var(--m-muted)]">Seed {formatMsToTime(l.seed_time_ms)}</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+  return (
+    <div className="pub-card flex items-center gap-3 p-3">
+      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--m-aqua-soft)] text-[var(--m-aqua-ink)]">{icon}</span>
+      <div className="leading-tight">
+        <p className="text-xs text-[var(--m-muted)]">{label}</p>
+        <p className="pub-time text-lg text-[var(--m-ink)]">{value}</p>
+      </div>
+    </div>
+  );
+}
+
+function TabBtn({ active, onClick, icon, label }: { active: boolean; onClick: () => void; icon: React.ReactNode; label: string }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors ${
+        active ? 'bg-[var(--m-aqua)] text-white shadow-sm' : 'text-[var(--m-muted)] hover:bg-[var(--m-aqua-soft)] hover:text-[var(--m-ink)]'
+      }`}
+    >
+      {icon} {label}
+    </button>
+  );
+}

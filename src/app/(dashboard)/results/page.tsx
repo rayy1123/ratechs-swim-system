@@ -1,0 +1,201 @@
+import { createClient } from '@/lib/supabase/server';
+import { ResultInputOperator } from '@/components/modules/result-input-operator';
+import { Trophy } from 'lucide-react';
+import { PageHeader } from '@/components/ui/page-header';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { EmptyState } from '@/components/ui/empty-state';
+import { EventResultsToggle } from '@/components/modules/event-results-toggle';
+import { getEventLiveConfig } from '@/lib/data/live-scoreboard-server';
+
+// Types untuk menyempurnakan Type Safety
+export interface HeatAssignmentWithResult {
+  id: string;
+  lane_number: number;
+  registrations: {
+    id: string;
+    seed_time_ms: number | null;
+    athletes: {
+      full_name: string;
+      athlete_number: string;
+      schools: { name: string } | null;
+    } | null;
+  } | null;
+  results: {
+    id: string;
+    time_ms: number | null;
+    status: string;
+  }[] | null;
+}
+
+export interface HeatWithAssignments {
+  id: string;
+  heat_number: number;
+  heat_assignments: HeatAssignmentWithResult[];
+}
+
+export default async function ResultsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ eventId?: string; compEventId?: string }>;
+}) {
+  const supabase = await createClient();
+  const params = await searchParams;
+
+  // 1. Ambil daftar event aktif
+  const { data: events } = await supabase
+    .from('events')
+    .select('id, name, start_date, end_date')
+    .order('created_at', { ascending: false });
+
+  const activeEventId = params.eventId || events?.[0]?.id || '';
+  const selectedEventObj = events?.find((e) => e.id === activeEventId) || events?.[0] || null;
+  const liveConfig = selectedEventObj ? getEventLiveConfig(selectedEventObj.id) : null;
+
+  // 2. Ambil daftar nomor lomba berdasarkan event yang dipilih
+  const { data: compEvents } = await supabase
+    .from('competition_events')
+    .select('id, name, stroke, distance_meters, gender, grade_level, class_name')
+    .eq('event_id', activeEventId);
+
+  // Validasi agar compEventId benar-benar milik event yang aktif
+  const isValidCompEvent = compEvents?.some((ce) => ce.id === params.compEventId);
+  const activeCompEventId = isValidCompEvent ? params.compEventId! : compEvents?.[0]?.id || '';
+
+  // 3. Ambil data Heat & Assignment beserta Hasil Lomba
+  let heatAssignments: HeatWithAssignments[] = [];
+
+  if (activeCompEventId) {
+    const { data: heats } = await supabase
+      .from('heats')
+      .select(`
+        id,
+        heat_number,
+        heat_assignments (
+          id,
+          lane_number,
+          registrations (
+            id,
+            seed_time_ms,
+            athletes (
+              full_name,
+              athlete_number,
+              schools (name)
+            )
+          ),
+          results (
+            id,
+            time_ms,
+            status
+          )
+        )
+      `)
+      .eq('competition_event_id', activeCompEventId)
+      .order('heat_number', { ascending: true });
+
+    // Pastikan lane_number di setiap heat terurut rapi & hasil lomba tersinkron 100%
+    if (heats) {
+      const allAssignIds = heats.flatMap((h) => (h.heat_assignments || []).map((ha) => ha.id));
+      const directResultsMap: Record<string, { id: string; time_ms: number | null; status: string }> = {};
+      if (allAssignIds.length > 0) {
+        const { data: dbRes } = await supabase
+          .from('results')
+          .select('id, heat_assignment_id, time_ms, status')
+          .in('heat_assignment_id', allAssignIds);
+        if (dbRes) {
+          dbRes.forEach((r) => {
+            directResultsMap[r.heat_assignment_id] = r;
+          });
+        }
+      }
+
+      heatAssignments = heats.map((h) => ({
+        ...h,
+        heat_assignments: (h.heat_assignments || [])
+          .sort((a, b) => a.lane_number - b.lane_number)
+          .map((ha) => {
+            const direct = directResultsMap[ha.id];
+            return {
+              ...ha,
+              results: direct ? [direct] : ha.results,
+            };
+          }),
+      })) as unknown as HeatWithAssignments[];
+    }
+  }
+
+  // 4. Ambil Rekor Terkini untuk Nomor Lomba Aktif (rajendra_records)
+  let currentRecord: {
+    id?: string;
+    time_ms: number;
+    athlete_name: string;
+    school_name?: string;
+    event_year?: number;
+  } | null = null;
+
+  if (activeCompEventId) {
+    const { data: recordData } = await supabase
+      .from('rajendra_records')
+      .select(`
+        id,
+        time_ms,
+        event_year,
+        athlete_id,
+        athletes (
+          full_name,
+          schools ( name )
+        )
+      `)
+      .eq('competition_event_id', activeCompEventId)
+      .eq('is_active', true)
+      .maybeSingle();
+
+    if (recordData && recordData.time_ms) {
+      const rawAth = Array.isArray(recordData.athletes) ? recordData.athletes[0] : recordData.athletes;
+      const rawSchool = Array.isArray(rawAth?.schools) ? rawAth?.schools[0] : rawAth?.schools;
+      currentRecord = {
+        id: recordData.id,
+        time_ms: Number(recordData.time_ms),
+        athlete_name: rawAth?.full_name || 'Pemegang Rekor',
+        school_name: rawSchool?.name || 'Klub',
+        event_year: recordData.event_year,
+      };
+    }
+  }
+
+  return (
+    <div className="mx-auto max-w-7xl space-y-6 p-6">
+      <Breadcrumb items={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Input Hasil' }]} className="mb-2" />
+      <PageHeader
+        title="Input Hasil Lomba & Record Breaker"
+        description="Input waktu tempuh per lintasan (lane). Hasil otomatis tersimpan, terupdate secara realtime, dan mendeteksi pecah rekor kejuaraan."
+        icon={<Trophy className="h-6 w-6" />}
+        actions={
+          selectedEventObj && liveConfig ? (
+            <EventResultsToggle
+              eventId={selectedEventObj.id}
+              initialMode={liveConfig.resultsMode}
+              event={selectedEventObj}
+            />
+          ) : undefined
+        }
+      />
+
+      {!events || events.length === 0 ? (
+        <EmptyState
+          icon={<Trophy className="h-6 w-6" />}
+          title="Belum ada event"
+          description="Silakan buat event terlebih dahulu di menu Events atau impor Buku Acara Excel untuk mulai input hasil."
+        />
+      ) : (
+        <ResultInputOperator
+          events={events}
+          compEvents={compEvents || []}
+          initialEventId={activeEventId}
+          initialCompEventId={activeCompEventId}
+          heatsData={heatAssignments}
+          currentRecord={currentRecord}
+        />
+      )}
+    </div>
+  );
+}
