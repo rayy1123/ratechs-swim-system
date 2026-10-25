@@ -1,0 +1,9 @@
+.git
+node_modules
+.next
+.claude
+.orca
+docs
+k8s
+supabase/.temp
+*.log
