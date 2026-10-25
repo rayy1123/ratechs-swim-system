@@ -34,21 +34,21 @@ drop policy if exists landing_showcases_insert on public.landing_showcases;
 create policy landing_showcases_insert on public.landing_showcases
   for insert with check (
     public.is_super_admin()
-    or exists (select 1 from public.profiles where id = auth.uid() and role in ('super_admin', 'admin_kejuaraan', 'operator'))
+    or exists (select 1 from public.profiles where id = auth.uid() and role::text in ('super_admin', 'event_admin', 'admin_kejuaraan', 'operator'))
   );
 
 drop policy if exists landing_showcases_update on public.landing_showcases;
 create policy landing_showcases_update on public.landing_showcases
   for update using (
     public.is_super_admin()
-    or exists (select 1 from public.profiles where id = auth.uid() and role in ('super_admin', 'admin_kejuaraan', 'operator'))
+    or exists (select 1 from public.profiles where id = auth.uid() and role::text in ('super_admin', 'event_admin', 'admin_kejuaraan', 'operator'))
   );
 
 drop policy if exists landing_showcases_delete on public.landing_showcases;
 create policy landing_showcases_delete on public.landing_showcases
   for delete using (
     public.is_super_admin()
-    or exists (select 1 from public.profiles where id = auth.uid() and role in ('super_admin', 'admin_kejuaraan', 'operator'))
+    or exists (select 1 from public.profiles where id = auth.uid() and role::text in ('super_admin', 'event_admin', 'admin_kejuaraan', 'operator'))
   );
 
 -- Seed default stat counters

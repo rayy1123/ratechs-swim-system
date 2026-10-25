@@ -32,19 +32,19 @@ drop policy if exists sponsors_write on public.sponsors;
 create policy sponsors_write on public.sponsors
   for insert with check (
     public.is_super_admin()
-    or exists (select 1 from public.profiles where id = auth.uid() and role in ('super_admin', 'admin_kejuaraan', 'admin_keuangan', 'operator'))
+    or exists (select 1 from public.profiles where id = auth.uid() and role::text in ('super_admin', 'event_admin', 'admin_kejuaraan', 'admin_keuangan', 'operator'))
   );
 
 drop policy if exists sponsors_update on public.sponsors;
 create policy sponsors_update on public.sponsors
   for update using (
     public.is_super_admin()
-    or exists (select 1 from public.profiles where id = auth.uid() and role in ('super_admin', 'admin_kejuaraan', 'admin_keuangan', 'operator'))
+    or exists (select 1 from public.profiles where id = auth.uid() and role::text in ('super_admin', 'event_admin', 'admin_kejuaraan', 'admin_keuangan', 'operator'))
   );
 
 drop policy if exists sponsors_delete on public.sponsors;
 create policy sponsors_delete on public.sponsors
   for delete using (
     public.is_super_admin()
-    or exists (select 1 from public.profiles where id = auth.uid() and role in ('super_admin', 'admin_kejuaraan', 'admin_keuangan', 'operator'))
+    or exists (select 1 from public.profiles where id = auth.uid() and role::text in ('super_admin', 'event_admin', 'admin_kejuaraan', 'admin_keuangan', 'operator'))
   );
